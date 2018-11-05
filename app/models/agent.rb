@@ -3,7 +3,9 @@ class Agent < ApplicationRecord
   has_many :uploaded_buyer_transactions, class_name: "UploadedTransaction", foreign_key: :selling_agent_id
 
   def all_transactions
-    UploadedTransaction.where("listing_agent_id = ? OR selling_agent_id = ?", id, id)
+    UploadedTransaction.where("listing_agent_id = ? OR selling_agent_id = ?", id, id).order(
+      "case when property_type in ('land', 'mobile_home') then 0 else 1 end desc, selling_date desc"
+    )
   end
 
   def recent_transactions
