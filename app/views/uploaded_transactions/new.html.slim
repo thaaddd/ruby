@@ -31,7 +31,11 @@ h1 New Transaction
   .form-group
     = f.label :property_type
     = f.select :property_type, %w(condo single_family_home multi_family_home commercial mobile_home land)
-
-
+  .form-group
+    = f.label :seller
+    = check_box_tag "selling_agent_id", @agent.id, true
+  .form-group
+    = f.label :buyer
+    = check_box_tag "listing_agent_id", @agent.id, false
 
   = f.submit "Save", class: "btn btn-primary"

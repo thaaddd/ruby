@@ -1,12 +1,23 @@
 class UploadedTransactionsController < ApplicationController
   def new
     @agent = Agent.find(params[:agent_id])
-    @uploaded_transaction = @agent.uploaded_seller_transactions.new
+    @uploaded_transaction = @agent.all_transactions.new
   end
 
   def create
     agent = Agent.find(params[:agent_id])
-    uploaded_transaction = agent.uploaded_seller_transactions.create(uploaded_transaction_params)
+    updated_params = uploaded_transaction_params
+
+    if params.key?('selling_agent_id') && params.key?('listing_agent_id')
+      updated_params['selling_agent_id'] = params[:agent_id]
+      updated_params['listing_agent_id'] = params[:agent_id]
+    elsif !params.key?('selling_agent_id') && params.key?('listing_agent_id')
+      updated_params['listing_agent_id'] = params[:agent_id]
+    else
+      updated_params['selling_agent_id'] = params[:agent_id]
+    end
+
+    uploaded_transaction = agent.all_transactions.create(updated_params)
 
     if uploaded_transaction.save
       redirect_to agent_path(agent), notice: "Transaction saved!"
