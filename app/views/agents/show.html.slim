@@ -1,7 +1,13 @@
 h1 = @agent.full_name
 p = @agent.bio
+.row style=("padding: inherit;")
 
-= link_to "Add Transaction", new_agent_uploaded_transaction_path(@agent), class: "btn btn-primary"
+  = link_to "Add Transaction", new_agent_uploaded_transaction_path(@agent), class: "btn btn-primary"
+
+.row style=("padding: inherit;")
+  = form_tag uploaded_transactions_import_path, multipart: true do
+    = file_field_tag :file
+    = submit_tag "Bulk Upload", class: "btn btn-primary"
 
 h3 Recent Transactions
 = will_paginate @uploaded_transactions

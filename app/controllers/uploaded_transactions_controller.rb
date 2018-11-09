@@ -26,6 +26,10 @@ class UploadedTransactionsController < ApplicationController
     end
   end
 
+  def import
+    UploadedTransaction.import(params[:file])
+    redirect_to root_url, notice: "CSV imported!"
+  end
   private
 
   def uploaded_transaction_params
